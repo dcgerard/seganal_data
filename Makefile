@@ -6,7 +6,7 @@ rout = ./output/rout
 all: sp
 
 .PHONY: sp
-sp: ./output/sprep_f1.RData ./output/sprep_norm.RData
+sp: ./output/segout_f1.RData ./output/segout_norm.RData
 
 ## Format raw data for use in multidog
 ## Output: refmats and sizemats for three populations, and rowRanges object for site locations
@@ -39,3 +39,14 @@ sp: ./output/sprep_f1.RData ./output/sprep_norm.RData
 	mkdir -p $(@D)
 	$(rexec) $< $(rout)/$(basename $(<F)).Rout
 
+## Fit segtest on norm data
+./output/segout_norm.RData: ./code/seg_fit_norm.R ./output/sprep_norm.RData
+	mkdir -p $(rout)
+	mkdir -p $(@D)
+	$(rexec) '--args nc=$(nc)' $< $(rout)/$(basename $(<F)).Rout
+
+## Fit segtest on f1 data
+./output/segout_f1.RData: ./code/seg_fit_f1.R ./output/sprep_f1.RData
+	mkdir -p $(rout)
+	mkdir -p $(@D)
+	$(rexec) '--args nc=$(nc)' $< $(rout)/$(basename $(<F)).Rout

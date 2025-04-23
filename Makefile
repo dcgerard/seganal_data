@@ -6,7 +6,7 @@ rout = ./output/rout
 all: sp
 
 .PHONY: sp
-sp: ./output/segout_f1.RData ./output/segout_norm.RData ./output/segout_norm_competing.RData
+sp: ./output/segout_f1.RData ./output/segout_norm.RData ./output/segout_norm_competing.RData ./output/segout_f1_competing.RData
 
 ## Format raw data for use in multidog
 ## Output: refmats and sizemats for three populations, and rowRanges object for site locations
@@ -52,7 +52,13 @@ sp: ./output/segout_f1.RData ./output/segout_norm.RData ./output/segout_norm_com
 	$(rexec) '--args nc=$(nc)' $< $(rout)/$(basename $(<F)).Rout
 
 ## Fit segtest with competing models on norm data
-./output/segout_norm_competing.RData: ./code/seg_fit_competing.R ./output/sprep_norm.RData
+./output/segout_norm_competing.RData: ./code/seg_fit_competing_norm.R ./output/sprep_norm.RData
+	mkdir -p $(rout)
+	mkdir -p $(@D)
+	$(rexec) '--args nc=$(nc)' $< $(rout)/$(basename $(<F)).Rout
+
+## Fit segtest with competing models on f1 data
+./output/segout_f1_competing.RData: ./code/seg_fit_competing_f1.R ./output/sprep_f1.RData
 	mkdir -p $(rout)
 	mkdir -p $(@D)
 	$(rexec) '--args nc=$(nc)' $< $(rout)/$(basename $(<F)).Rout

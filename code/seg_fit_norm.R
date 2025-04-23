@@ -26,6 +26,7 @@ plan(sequential)
 
 ## polymapR with posterior probabilities
 polymapr_out <- data.frame(
+  snp = dimnames(sprep_polymapr_pp$g)[[1]],
   p_value = rep(NA_real_, length.out = nrow(sprep_polymapr_pp$g)),
   p_invalid = rep(NA_real_, length.out = nrow(sprep_polymapr_pp$g))
 )

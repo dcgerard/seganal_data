@@ -46,7 +46,6 @@ stopifnot(sprep_seg_gl$p1 == uout_sub_gl$snpdf$p1geno)
 stopifnot(sprep_seg_gl$p2 == uout_sub_gl$snpdf$p2geno)
 
 ## prepare for polymapR
-## TODO: start from here.
 sprep_polymapr_pp <- list()
 sprep_polymapr_pp$g <- format_multidog(x = uout_sub_gl, varname = paste0("Pr_", 0:ploidy))
 sprep_polymapr_pp$p1 <- uout_sub_gl$snpdf$p1geno

@@ -1,5 +1,10 @@
 library(VariantAnnotation)
 vdat <- readVcf("./data/myGBSGenos_trifida_mergedSNPs_mergedTaxa_chr8.vcf")
+
+## Filter out multiallelic SNPs (only 212 of them)
+vdat <- vdat[sapply(fixed(vdat)$ALT, length) < 2, ]
+
+## Subset by population
 p1 <- vdat[, grep("^BT", colnames(vdat))]
 p2 <- vdat[, grep("^TB", colnames(vdat))]
 p3 <- vdat[, grep("^NKB", colnames(vdat))]

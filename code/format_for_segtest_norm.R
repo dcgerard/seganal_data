@@ -122,7 +122,7 @@ for (i in seq_len(nrow(uout_sub_g_mp$snpdf))) {
   invalid_genos <- (0:ploidy)[gf < TOL]
   badind <- uout_sub_g_mp$inddf$snp == snp & !(uout_sub_g_mp$inddf$ind %in% c("Beauregard_BT", "Tanzania_BT")) & uout_sub_g_mp$inddf$geno %in% invalid_genos
   ninvalid[[i]] <- sum(badind)
-  if (ninvalid[[i]] > 1) {
+  if (ninvalid[[i]] > 0) {
     uout_sub_g_mp$inddf[badind, ]$geno <- NA
   }
 }

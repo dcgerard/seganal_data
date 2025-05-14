@@ -1,10 +1,10 @@
-####################
 ## Analyze output of tests
-####################
+## setup ----
 library(tidyverse)
 library(updog)
 library(segtest)
 library(xtable)
+library(gt)
 load("./output/segout_f1.RData")
 load("./output/segout_f1_competing.RData")
 load("./output/sprep_f1.RData")
@@ -149,8 +149,8 @@ table(filter_snp(uout_sub_gl, snp == "S8_2212186")$inddf$geno)
 
 ## polymapR and segtest differ ----
 df_p |>
-  filter(polymapr > 0.1, segtest < 0.01) |>
-  sample_n(1)
+  filter(polymapr < 0.01, segtest > 0.5) |>
+  sample_n(4)
 
 df_p |>
   filter(snp %in% c("S8_18370562", "S8_4866982", "S8_14976727", "S8_17348718")) ->
@@ -158,6 +158,10 @@ df_p |>
 
 df_p |>
   filter(snp %in% c("S8_15463274", "S8_4572598", "S8_41319", "S8_10014838")) ->
+  df_p_low_s_high
+
+df_p |>
+  filter(snp %in% c("S8_428931", "S8_6684644", "S8_15657218", "S8_428940")) ->
   df_p_low_s_high
 
 uout_ps <- filter_snp(uout_sub_gl, snp %in% df_p_low_s_high$snp | snp %in% df_s_low_p_high$snp)
@@ -204,7 +208,7 @@ ggplot() +
 
 ggsave(filename = "./output/figs/snps_polymapr_seg.pdf", plot = pl, height = 7, width = 5, family = "Times")
 
-## rerun segtest approach without low counts
+## rerun segtest approach without low reference counts
 uout_s_low_p_high <- filter_snp(uout_sub_gl, snp %in% df_s_low_p_high$snp)
 uout_s_low_p_high$inddf |>
   filter(ref > 10) ->
@@ -217,4 +221,59 @@ df_s_low_p_high |>
   left_join(select(sout_s_low_p_high, snp, segtest_new = p_value)) ->
   tab_s_low_p_high
 
-tab_s_low_p_high
+tab_s_low_p_high |>
+  xtable(display = rep("G", 5), label = "tab:snps.polymapr.seg") |>
+  print(include.rownames = FALSE, file = "./output/figs/snps_polymapr_seg.txt")
+
+
+## rerun polymapr approaches
+pm <- filter_snp(uout_sub_gl, snp %in% df_p_low_s_high$snp) |>
+  format_multidog(varname = paste0("Pr_", 0:6))
+pm2 <- apply(pm, c(1, 3), sum)
+pm2[pm2 < 0.05 * dim(pm)[[2]] / 7] <- 0
+pmmat <- t(apply(pm2, 1, \(x) x / sum(x)))
+
+sprep_p_low_s_high <- filter_snp(uout_sub_gl, snp %in% df_p_low_s_high$snp) |>
+  multidog_to_g(type = "off_gl", ploidy = 6)
+sout_p_low_s_high <- seg_multi(
+  g = sprep_p_low_s_high$g,
+  p1_ploidy = 6,
+  p2_ploidy = 6,
+  p1 = sprep_p_low_s_high$p1,
+  p2 = sprep_p_low_s_high$p2,
+  model = "auto_dr")
+sout_p_low_s_high$p_value
+q1mat <- round(do.call(rbind, sout_p_low_s_high$q1), digits = 4)
+dimnames(q1mat) <- dimnames(pmmat)
+q0mat <- round(do.call(rbind, sout_p_low_s_high$q0), digits = 4)
+dimnames(q0mat) <- dimnames(pmmat)
+
+sout_auto <- seg_multi(
+  g = sprep_p_low_s_high$g,
+  p1_ploidy = 6,
+  p2_ploidy = 6,
+  p1 = sprep_p_low_s_high$p1,
+  p2 = sprep_p_low_s_high$p2,
+  model = "auto",
+  outlier = FALSE)
+automat <- round(do.call(rbind, sout_auto$q0), digits = 4)
+dimnames(automat) <- dimnames(pmmat)
+
+pivot_longer(as_tibble(pmmat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "polymapr_alt") |>
+  left_join(pivot_longer(as_tibble(automat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "polymapr_null"), by = join_by(snp, Genotype)) |>
+  left_join(pivot_longer(as_tibble(q1mat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "segtest_null"), by = join_by(snp, Genotype)) |>
+  left_join(pivot_longer(as_tibble(q0mat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "segtest_alt"), by = join_by(snp, Genotype)) |>
+  pivot_longer(cols = 3:6, names_to = "method", values_to = "gf") |>
+  mutate(gf = round(gf, digits = 3)) |>
+  pivot_wider(names_from = Genotype, values_from = gf) |>
+  arrange(snp, method) ->
+  df
+
+
+df |>
+  gt() |>
+  tab_spanner(label = "Genotype", columns = 3:9) |>
+  as_latex() ->
+  tb
+writeLines(tb, con = "./output/figs/tab_polymapr.txt")
+

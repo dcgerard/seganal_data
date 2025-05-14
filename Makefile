@@ -2,11 +2,18 @@ nc = 12
 rexec = R CMD BATCH --no-save --no-restore
 rout = ./output/rout
 
+spout = ./output/figs/sp_pval_hist.pdf \
+        ./output/figs/snps_mp_seg.pdf \
+        ./output/figs/snps_mp_seg.txt \
+        ./output/figs/snps_polymapr_seg.pdf \
+        ./output/figs/snps_polymapr_seg.txt \
+        ./output/figs/tab_polymapr.txt
+
 .PHONY: all
 all: sp
 
 .PHONY: sp
-sp: ./output/segout_f1.RData ./output/segout_norm.RData ./output/segout_norm_competing.RData ./output/segout_f1_competing.RData
+sp: $(spout) ./output/segout_f1.RData ./output/segout_norm.RData ./output/segout_norm_competing.RData ./output/segout_f1_competing.RData
 
 ## Format raw data for use in multidog
 ## Output: refmats and sizemats for three populations, and rowRanges object for site locations
@@ -62,3 +69,9 @@ sp: ./output/segout_f1.RData ./output/segout_norm.RData ./output/segout_norm_com
 	mkdir -p $(rout)
 	mkdir -p $(@D)
 	$(rexec) '--args nc=$(nc)' $< $(rout)/$(basename $(<F)).Rout
+
+## Plot results
+$(spout): ./code/plot_seg.R ./output/segout_f1.RData ./output/segout_f1_competing.RData ./output/sprep_f1.RData
+	mkdir -p $(rout)
+	mkdir -p $(@D)
+	$(rexec) $< $(rout)/$(basename $(<F)).Rout

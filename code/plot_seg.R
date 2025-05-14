@@ -87,7 +87,6 @@ uout_ps$snpdf |>
          snp = factor(snp, levels = snplist)) ->
   slope_df
 
-
 uout_ps$inddf |>
   mutate(
     alt = size - ref,
@@ -177,7 +176,6 @@ uout_ps$snpdf |>
          snp = factor(snp, levels = snplist)) ->
   slope_df
 
-
 uout_ps$inddf |>
   mutate(
     alt = size - ref,
@@ -221,10 +219,9 @@ df_s_low_p_high |>
   left_join(select(sout_s_low_p_high, snp, segtest_new = p_value)) ->
   tab_s_low_p_high
 
-tab_s_low_p_high |>
+bind_rows(select(df_p_low_s_high, snp, polymapr, segtest), tab_s_low_p_high) |>
   xtable(display = rep("G", 5), label = "tab:snps.polymapr.seg") |>
   print(include.rownames = FALSE, file = "./output/figs/snps_polymapr_seg.txt")
-
 
 ## rerun polymapr approaches
 pm <- filter_snp(uout_sub_gl, snp %in% df_p_low_s_high$snp) |>
@@ -269,11 +266,9 @@ pivot_longer(as_tibble(pmmat, rownames = "snp"), cols = -snp, names_to = "Genoty
   arrange(snp, method) ->
   df
 
-
 df |>
   gt() |>
   tab_spanner(label = "Genotype", columns = 3:9) |>
   as_latex() ->
   tb
 writeLines(tb, con = "./output/figs/tab_polymapr.txt")
-

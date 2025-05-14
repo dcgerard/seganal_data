@@ -36,6 +36,7 @@ df_p |>
   pivot_longer(cols = -snp, names_to = "method", values_to = "p_value") |>
   ggplot(aes(x = p_value)) +
   geom_histogram(bins = 30, color = "black", fill = "white") +
+  xlab("p-value") +
   facet_wrap(.~method, scales = "free") +
   theme_bw() +
   theme(strip.background = element_rect(fill = "white")) ->

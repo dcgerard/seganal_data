@@ -259,8 +259,8 @@ dimnames(automat) <- dimnames(pmmat)
 
 pivot_longer(as_tibble(pmmat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "polymapr_alt") |>
   left_join(pivot_longer(as_tibble(automat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "polymapr_null"), by = join_by(snp, Genotype)) |>
-  left_join(pivot_longer(as_tibble(q1mat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "segtest_null"), by = join_by(snp, Genotype)) |>
-  left_join(pivot_longer(as_tibble(q0mat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "segtest_alt"), by = join_by(snp, Genotype)) |>
+  left_join(pivot_longer(as_tibble(q1mat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "segtest_alt"), by = join_by(snp, Genotype)) |>
+  left_join(pivot_longer(as_tibble(q0mat, rownames = "snp"), cols = -snp, names_to = "Genotype", values_to = "segtest_null"), by = join_by(snp, Genotype)) |>
   pivot_longer(cols = 3:6, names_to = "method", values_to = "gf") |>
   mutate(gf = round(gf, digits = 3)) |>
   pivot_wider(names_from = Genotype, values_from = gf) |>

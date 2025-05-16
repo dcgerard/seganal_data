@@ -128,8 +128,13 @@ df_m_low_s_high |>
   left_join(select(sout_m_low_s_high, snp, mappoly_new = p_value)) ->
   tab_m_low_s_high
 
-## rerun segtest approach without low counts
+## rerun segtest approach with null genes
 uout_s_low_m_high <- filter_snp(uout_sub_gl, snp %in% df_s_low_m_high$snp)
+sprep_s_low_m_high_all <- multidog_to_g(mout = uout_s_low_m_high, type = "off_gl", ploidy = 6)
+sout_s_low_m_high_all <- seg_multi(g = sprep_s_low_m_high_all$g, p1_ploidy = 6, p2_ploidy = 6, p1 = sprep_s_low_m_high_all$p1, p2 = sprep_s_low_m_high_all$p2, model = "auto_dr", outlier = FALSE, null_allele = TRUE, ntry = 10)
+sout_s_low_m_high_all$p_value
+
+## rerun segtest approach without low counts
 uout_s_low_m_high$inddf |>
   filter(ref > 30) ->
   uout_s_low_m_high$inddf
@@ -138,27 +143,20 @@ sout_s_low_m_high <- seg_multi(g = sprep_s_low_m_high$g, p1_ploidy = 6, p2_ploid
 
 df_s_low_m_high |>
   select(snp, mappoly, segtest) |>
-  left_join(select(sout_s_low_m_high, snp, segtest_new = p_value)) ->
+  left_join(select(sout_s_low_m_high, snp, segtest_new = p_value)) |>
+  left_join(select(sout_s_low_m_high_all, snp, segtest_new2 = p_value)) ->
   tab_s_low_m_high
 
 bind_rows(tab_m_low_s_high, tab_s_low_m_high) |>
-  xtable(display = rep("G", 6), label = "tab:snps.mp.seg") |>
+  xtable(display = rep("G", 7), label = "tab:snps.mp.seg") |>
   print(include.rownames = FALSE, file = "./output/figs/snps_mp_seg.txt")
 
 table(filter_snp(uout_sub_gl, snp == "S8_2212186")$inddf$geno)
 
 ## polymapR and segtest differ ----
 df_p |>
-  filter(polymapr < 0.01, segtest > 0.5) |>
-  sample_n(4)
-
-df_p |>
   filter(snp %in% c("S8_18370562", "S8_4866982", "S8_14976727", "S8_17348718")) ->
   df_s_low_p_high
-
-df_p |>
-  filter(snp %in% c("S8_15463274", "S8_4572598", "S8_41319", "S8_10014838")) ->
-  df_p_low_s_high
 
 df_p |>
   filter(snp %in% c("S8_428931", "S8_6684644", "S8_15657218", "S8_428940")) ->
@@ -207,8 +205,13 @@ ggplot() +
 
 ggsave(filename = "./output/figs/snps_polymapr_seg.pdf", plot = pl, height = 7, width = 5, family = "Times")
 
-## rerun segtest approach without low reference counts
+## rerun segtest approach with null genes
 uout_s_low_p_high <- filter_snp(uout_sub_gl, snp %in% df_s_low_p_high$snp)
+sprep_s_low_p_high_all <- multidog_to_g(mout = uout_s_low_p_high, type = "off_gl", ploidy = 6)
+sout_s_low_p_high_all <- seg_multi(g = sprep_s_low_p_high_all$g, p1_ploidy = 6, p2_ploidy = 6, p1 = sprep_s_low_p_high_all$p1, p2 = sprep_s_low_p_high_all$p2, model = "auto_dr", outlier = FALSE, null_allele = TRUE, ntry = 10)
+sout_s_low_p_high_all$p_value
+
+## rerun segtest approach without low reference counts
 uout_s_low_p_high$inddf |>
   filter(ref > 10) ->
   uout_s_low_p_high$inddf
@@ -217,11 +220,12 @@ sout_s_low_p_high <- seg_multi(g = sprep_s_low_p_high$g, p1_ploidy = 6, p2_ploid
 
 df_s_low_p_high |>
   select(snp, polymapr, segtest) |>
-  left_join(select(sout_s_low_p_high, snp, segtest_new = p_value)) ->
+  left_join(select(sout_s_low_p_high, snp, segtest_new = p_value)) |>
+  left_join(select(sout_s_low_p_high_all, snp, segtest_new2 = p_value)) ->
   tab_s_low_p_high
 
 bind_rows(select(df_p_low_s_high, snp, polymapr, segtest), tab_s_low_p_high) |>
-  xtable(display = rep("G", 5), label = "tab:snps.polymapr.seg") |>
+  xtable(display = rep("G", 6), label = "tab:snps.polymapr.seg") |>
   print(include.rownames = FALSE, file = "./output/figs/snps_polymapr_seg.txt")
 
 ## rerun polymapr approaches

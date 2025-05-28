@@ -10,18 +10,23 @@
 This repo contains the analysis scripts needed to reproduce the
 real-data analyses of Gerard et al. (2025).
 
-1.  Download the data from \[URL HERE\] and place it in the `data`
-    folder as “myGBSGenos_trifida_mergedSNPs_mergedTaxa_chr8.vcf”.
-
-2.  Restore the `renv`:
+1.  Open up R and restore the `renv`:
 
         renv::restore()
 
-3.  Run make in the terminal.
+2.  Run make in the terminal.
 
         make
 
-4.  Get coffee.
+3.  Get coffee.
+
+Note that running `make` uses `wget` to download the raw data from
+Figshare (<https://doi.org/10.25387/g3.10255844>). You can instead down
+load it manually:
+<https://gsajournals.figshare.com/ndownloader/files/18517700>
+
+Just make sure the VCF file is called “trifida_chr8.vcf” and is placed
+in the “data” folder.
 
 # References
 

@@ -12,8 +12,8 @@ if (length(args) == 0) {
 
 ## genotype first population
 uout_f1_p1 <- multidog(
-  refmat = refmat_p1,
-  sizemat = sizemat_p1,
+  refmat = refmat,
+  sizemat = sizemat,
   ploidy = ploidy,
   model = "f1",
   p1_id = "Beauregard_BT",

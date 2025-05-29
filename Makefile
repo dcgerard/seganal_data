@@ -15,9 +15,13 @@ all: sp
 .PHONY: sp
 sp: $(spout) ./output/segout_f1.RData ./output/segout_norm.RData ./output/segout_norm_competing.RData ./output/segout_f1_competing.RData
 
+./data/trifida_chr8.vcf:
+	wget --directory-prefix=data -nc https://gsajournals.figshare.com/ndownloader/files/18517700
+	mv ./data/18517700 ./data/trifida_chr8.vcf
+
 ## Format raw data for use in multidog
 ## Output: refmats and sizemats for three populations, and rowRanges object for site locations
-./output/raw_counts.RData: ./code/format_for_multidog.R
+./output/raw_counts.RData: ./code/format_for_multidog.R ./data/trifida_chr8.vcf
 	mkdir -p $(rout)
 	mkdir -p $(@D)
 	$(rexec) $< $(rout)/$(basename $(<F)).Rout

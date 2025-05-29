@@ -68,7 +68,7 @@ cor(df_p[, c("mappoly", "polymapr", "segtest")], use = "pairwise.complete.obs")
 
 ## mappoly and segtest differ ----
 df_p |>
-  filter(snp %in% c("S8_2301244", "S8_2301256", "S8_16038595", "S8_4395910")) ->
+  filter(snp %in% c("S8_2301244", "S8_2301256", "S8_16038595", "S8_5495374")) ->
   df_m_low_s_high
 
 df_p |>
@@ -121,6 +121,7 @@ ggsave(filename = "./output/figs/snps_mp_seg.pdf", plot = pl, height = 7, width 
 ## rerun mappoly approach with all genotypes
 uout_m_low_s_high <- filter_snp(uout_sub_gl, snp %in% df_m_low_s_high$snp)
 sprep_m_low_s_high <- multidog_to_g(mout = uout_m_low_s_high, type = "off_g", ploidy = 6)
+sprep_m_low_s_high$g[,"0"] <- 0 ## invalid genotype
 sout_m_low_s_high <- seg_multi(g = sprep_m_low_s_high$g, p1_ploidy = 6, p2_ploidy = 6, p1 = sprep_m_low_s_high$p1, p2 = sprep_m_low_s_high$p2, model = "auto", outlier = FALSE)
 
 df_m_low_s_high |>
@@ -155,11 +156,11 @@ table(filter_snp(uout_sub_gl, snp == "S8_2212186")$inddf$geno)
 
 ## polymapR and segtest differ ----
 df_p |>
-  filter(snp %in% c("S8_18370562", "S8_4866982", "S8_14976727", "S8_17348718")) ->
+  filter(snp %in% c("S8_18370562", "S8_4866982", "S8_14976727", "S8_3316277")) ->
   df_s_low_p_high
 
 df_p |>
-  filter(snp %in% c("S8_428931", "S8_6684644", "S8_15657218", "S8_428940")) ->
+  filter(snp %in% c("S8_6684644", "S8_15657218", "S8_428940", "S8_1719882")) ->
   df_p_low_s_high
 
 uout_ps <- filter_snp(uout_sub_gl, snp %in% df_p_low_s_high$snp | snp %in% df_s_low_p_high$snp)

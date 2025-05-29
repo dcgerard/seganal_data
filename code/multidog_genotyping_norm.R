@@ -13,8 +13,8 @@ if (length(args) == 0) {
 ## genotype first population
 doParallel::registerDoParallel()
 uout_norm_p1 <- multidog(
-  refmat = refmat_p1,
-  sizemat = sizemat_p1,
+  refmat = refmat,
+  sizemat = sizemat,
   ploidy = ploidy,
   model = "norm",
   nc = nc

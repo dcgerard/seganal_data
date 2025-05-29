@@ -23,6 +23,7 @@ bound_pp <- 0.95
 uout_f1_p1$snpdf|>
   filter(!(p1geno %in% c(0, ploidy) & p2geno %in% c(0, ploidy))) ->
   filter_df_1
+nrow(filter_df_1) ## Number not nullplex in both parents
 
 ## Read depth filter
 uout_f1_p1$inddf |>
@@ -33,6 +34,7 @@ uout_f1_p1$inddf |>
 
 ## Subset
 snp_list <- intersect(filter_df_1$snp, filter_df_2$snp)
+length(snp_list) ## number also above average read depth
 uout_sub_gl <- filter_snp(x = uout_f1_p1, expr = snp %in% snp_list)
 
 ## prepare for segtest
@@ -60,16 +62,23 @@ stopifnot(names(sprep_polymapr_pp$p2) == rownames(sprep_polymapr_pp$g))
 uout_f1_p1$snpdf|>
   filter(!(p1geno %in% c(0, ploidy) & p2geno %in% c(0, ploidy))) ->
   filter_df_1
+nrow(filter_df_1) ## number of snps not monomorphic in both parents
 
 ## maxpostprob filter, missing data filter, average read-depth filter
 uout_f1_p1$inddf |>
   mutate(size = if_else(maxpostprob < bound_pp, NA, size)) |>
   group_by(snp) |>
   summarize(ave_rd = mean(size, na.rm = TRUE), pna = mean(is.na(size))) |>
-  filter(ave_rd > bound_rd, pna < bound_miss) ->
+  filter(ave_rd > bound_rd) ->
+  filter_df_2_temp
+length(intersect(filter_df_1$snp, filter_df_2_temp$snp)) ## number also based on read depth
+
+filter_df_2_temp |>
+  filter(pna < bound_miss) ->
   filter_df_2
 
 snp_list <- intersect(filter_df_1$snp, filter_df_2$snp)
+length(snp_list) ## Number also based on missingness bound
 uout_sub_g <- filter_snp(x = uout_f1_p1, expr = snp %in% snp_list)
 
 uout_sub_g$inddf$geno[uout_sub_g$inddf$maxpostprob < bound_pp] <- NA

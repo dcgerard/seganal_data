@@ -1,9 +1,11 @@
 ## Read them in
 library(VariantAnnotation)
 vd <- readVcf("./data/trifida_chr8.vcf")
+nrow(vd)
 
 ## Filter out multiallelci SNPs
 vd <- vd[sapply(fixed(vd)$ALT, length) < 2, ]
+nrow(vd)
 
 ## Split parents and offspring
 vd_parents <- vd[, grepl("^Beauregard\\_BT\\_\\d+", colnames(vd)) | grepl("^Tanzania\\_BT\\_\\d+", colnames(vd))]

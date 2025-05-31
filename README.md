@@ -20,13 +20,16 @@ real-data analyses of Gerard et al. (2025).
 
 3.  Get coffee.
 
-Note that running `make` uses `wget` to download the raw data from
-Figshare (<https://doi.org/10.25387/g3.10255844>). You can instead down
-load it manually:
-<https://gsajournals.figshare.com/ndownloader/files/18517700>
+    - [Aslin Coffee DC](https://maps.app.goo.gl/n8vVbjkwwrC9fiyy5)
+    - [Doubles](https://maps.app.goo.gl/CXNaN1HpgVxZDk9h6)
+    - [Bar Americano](https://maps.app.goo.gl/U6XJmTazJssadUS4A)
 
-Just make sure the VCF file is called “trifida_chr8.vcf” and is placed
-in the “data” folder.
+Note that running `make` uses `wget` to download the raw data from
+Figshare (<https://doi.org/10.25387/g3.10255844>). You can instead
+download it manually
+(<https://gsajournals.figshare.com/ndownloader/files/18517700>). Just
+make sure the VCF file is called “trifida_chr8.vcf” and is placed in the
+“data” folder.
 
 # References
 

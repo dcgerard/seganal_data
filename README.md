@@ -39,6 +39,6 @@ make sure the VCF file is called “trifida_chr8.vcf” and is placed in the
 
 # References
 
-Gerard D, Ambrosano GB, Pereira GDS, & Garcia AAF (2025). “Tests for
-segregation distortion in higher ploidy F1 populations.” *Unpublished
-Manuscript*.
+Gerard D, Ambrosano GB, da Silva Pereira G, & Garcia AAF (2025). “Tests
+for segregation distortion in higher ploidy F1 populations.”
+*Unpublished Manuscript*.

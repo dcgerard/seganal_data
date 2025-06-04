@@ -32,7 +32,7 @@ select(mapout_g, snp, mappoly = p_value) |>
   df_p
 
 df_p |>
-  select(snp, mappoly, segtest, polymapr) |>
+  select(snp, mappoly, segtest, polymapR = polymapr) |>
   pivot_longer(cols = -snp, names_to = "method", values_to = "p_value") |>
   ggplot(aes(x = p_value)) +
   geom_histogram(bins = 30, color = "black", fill = "white") +

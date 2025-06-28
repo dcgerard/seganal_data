@@ -39,7 +39,7 @@ make sure the VCF file is called “trifida_chr8.vcf” and is placed in the
 
 # References
 
-Gerard, D, Ambrosano, GB, Pereira, GdS, & Garcia, AAF (2025b). “Tests
-for segregation distortion in higher ploidy F1 populations.” *bioRxiv*,
+Gerard, D, Ambrosano, GB, Pereira, GdS, & Garcia, AAF (2025). “Tests for
+segregation distortion in higher ploidy F1 populations.” *bioRxiv*,
 p. 1–20.
 [bioRxiv:2025.06.23.661114](https://doi.org/10.1101/2025.06.23.661114)

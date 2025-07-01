@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15784738.svg)](https://doi.org/10.5281/zenodo.15784738)
 <!-- badges: end -->
 
 This repo contains the analysis scripts needed to reproduce the

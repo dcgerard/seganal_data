@@ -20,19 +20,22 @@ al. (2020) via Figshare
 
 3.  Place “trifida_chr8.vcf” in the “data” folder.
 
-4.  Open up R and restore the `renv`:
+4.  Edit the `nc` argument in the `Makefile` to be the number of cores
+    you wish to use for the analysis.
+
+5.  Open up R and restore the `renv`:
 
     ``` r
     renv::restore()
     ```
 
-5.  Run `make` in the terminal:
+6.  Run `make` in the terminal:
 
     ``` bash
     make
     ```
 
-6.  Get coffee:
+7.  Get coffee:
 
     - [Aslin Coffee DC](https://maps.app.goo.gl/n8vVbjkwwrC9fiyy5)
     - [Doubles](https://maps.app.goo.gl/CXNaN1HpgVxZDk9h6)

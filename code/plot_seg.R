@@ -155,12 +155,17 @@ bind_rows(tab_m_low_s_high, tab_s_low_m_high) |>
 table(filter_snp(uout_sub_gl, snp == "S8_2212186")$inddf$geno)
 
 ## polymapR and segtest differ ----
+# df_p |>
+#   filter(polymapr < 0.05, segtest > 0.1) |>
+#   select(snp) |>
+#   slice(1:5)
+
 df_p |>
   filter(snp %in% c("S8_18370562", "S8_4866982", "S8_14976727", "S8_3316277")) ->
   df_s_low_p_high
 
 df_p |>
-  filter(snp %in% c("S8_6684644", "S8_15657218", "S8_428940", "S8_1719882")) ->
+  filter(snp %in% c("S8_106538", "S8_15657218", "S8_428940", "S8_1719882")) ->
   df_p_low_s_high
 
 uout_ps <- filter_snp(uout_sub_gl, snp %in% df_p_low_s_high$snp | snp %in% df_s_low_p_high$snp)

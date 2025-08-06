@@ -12,6 +12,8 @@ This repo contains the analysis scripts needed to reproduce the
 real-data analyses of Gerard et al. (2025). Data come from Mollinari et
 al. (2020) via Figshare
 ([doi:10.25387/g3.10255844](https://doi.org/10.25387/g3.10255844)).
+These analyses were evaluated using R version 4.5.0. The exact versions
+of all packages used are listed in the “renv.lock” file.
 
 1.  Download the data from Figshare:
     <https://gsajournals.figshare.com/ndownloader/files/18517700>
